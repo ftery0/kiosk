@@ -1,0 +1,31 @@
+{
+  "common": {
+    "dineIn": "Dine In",
+    "takeout": "Take Out",
+    "cart": "Cart",
+    "order": "Order",
+    "back": "Back",
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "quantity": "Quantity",
+    "total": "Total",
+    "payment": "Payment",
+    "orderComplete": "Order has been received",
+    "addToCart": "Add to Cart",
+    "emptyCart": "Your cart is empty"
+  },
+  "admin": {
+    "login": "Admin Login",
+    "password": "Password",
+    "categories": "Category Management",
+    "menus": "Menu Management",
+    "orders": "Order Management",
+    "today": "Today",
+    "thisWeek": "This Week",
+    "thisMonth": "This Month",
+    "orderDetails": "Order Details",
+    "tableNumber": "Table Number",
+    "orderTime": "Order Time",
+    "status": "Status"
+  }
+} 

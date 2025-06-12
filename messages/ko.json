@@ -1,0 +1,31 @@
+{
+  "common": {
+    "dineIn": "매장 이용",
+    "takeout": "포장",
+    "cart": "장바구니",
+    "order": "주문하기",
+    "back": "뒤로가기",
+    "confirm": "확인",
+    "cancel": "취소",
+    "quantity": "수량",
+    "total": "총액",
+    "payment": "결제하기",
+    "orderComplete": "주문이 접수되었습니다",
+    "addToCart": "장바구니에 추가",
+    "emptyCart": "장바구니가 비어있습니다"
+  },
+  "admin": {
+    "login": "관리자 로그인",
+    "password": "비밀번호",
+    "categories": "카테고리 관리",
+    "menus": "메뉴 관리",
+    "orders": "주문 관리",
+    "today": "오늘",
+    "thisWeek": "이번 주",
+    "thisMonth": "이번 달",
+    "orderDetails": "주문 상세",
+    "tableNumber": "테이블 번호",
+    "orderTime": "주문 시간",
+    "status": "상태"
+  }
+} 
