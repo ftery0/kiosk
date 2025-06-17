@@ -24,7 +24,7 @@ const Cart = ({ cartItems, updateQuantity }: CartProps) => {
           {cartItems.map(({ id, name, price, quantity }) => (
             <li key={id} className="flex justify-between items-center text-sm">
               <span>
-                {name} x{" "}
+                {name} {" "}
                 <button
                   className="px-2 bg-gray-200 rounded"
                   onClick={() => updateQuantity(id, -1)}

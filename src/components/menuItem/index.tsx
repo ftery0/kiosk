@@ -9,15 +9,16 @@ interface MenuItemProps {
 }
 
 const MenuItem = ({ menu, onClick }:MenuItemProps) => {
+  
   return (
     <div   className="cursor-pointer bg-white rounded-lg shadow p-4 flex flex-col items-center hover:shadow-lg transition"
       onClick={onClick}
       >
       <Image
-        src={menu.image}
+        src={menu.imagePath}
         alt={menu.name}
-        width={100} 
-        height={100} 
+        width={150} 
+        height={150} 
         className="object-cover rounded-md mb-2"
       />
       <div className="font-semibold text-lg">{menu.name}</div>

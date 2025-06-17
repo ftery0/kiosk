@@ -12,11 +12,13 @@ interface MenuModalProps {
 const MenuModal = ({ menu, onClose, onAddToCart }: MenuModalProps) => {
   const [quantity, setQuantity] = useState(1);
 
+  const totalPrice = menu.price * quantity;
+
   return (
     <div className="absolute inset-0 bg-black/50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg p-6 w-80 shadow-lg text-center">
         <Image
-          src={menu.image}
+          src={menu.imagePath}
           alt={menu.name}
           width={320}
           height={160}
@@ -24,7 +26,7 @@ const MenuModal = ({ menu, onClose, onAddToCart }: MenuModalProps) => {
         />
         <h2 className="text-xl font-bold mb-2">{menu.name}</h2>
         <p className="text-[var(--primary)] font-semibold mb-4">
-          {menu.price.toLocaleString()}원
+          {totalPrice.toLocaleString()}원
         </p>
 
         <div className="flex justify-center items-center menus-center space-x-4 mb-6">
