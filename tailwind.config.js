@@ -1,3 +1,4 @@
+// tailwind.config.js
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
@@ -10,10 +11,7 @@ module.exports = {
       padding: {
         '4': '1rem',
       },
-      margin: {
-        '4': '1rem',
-      },
     },
   },
   plugins: [],
-} 
+};

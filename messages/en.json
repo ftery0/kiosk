@@ -1,31 +1,34 @@
 {
-  "common": {
-    "dineIn": "Dine In",
-    "takeout": "Take Out",
-    "cart": "Cart",
-    "order": "Order",
-    "back": "Back",
-    "confirm": "Confirm",
-    "cancel": "Cancel",
-    "quantity": "Quantity",
-    "total": "Total",
-    "payment": "Payment",
-    "orderComplete": "Order has been received",
-    "addToCart": "Add to Cart",
-    "emptyCart": "Your cart is empty"
+  "Common": {
+    "Menu": "Menu",
+    "Category": "Category",
+    "KoreanFood": "Korean Food",
+    "Drinks": "Drinks",
+    "Noodles": "Noodles",
+    "Desserts": "Desserts",
+    "AddToCart": "Add",
+    "Cart": "Cart",
+    "Quantity": "Quantity",
+    "Delete": "Delete",
+    "ClearAll": "Clear All",
+    "TotalAmount": "Total Amount",
+    "Checkout": "Checkout",
+    "PaymentComplete": "Payment completed.",
+    "NoImage": "No Image",
+    "Loading": "Loading...",
+    "TimeRemaining": "Time Remaining",
+    "seconds": "s",
+    "AllDelete": "Delete All",
+    "SelectedItems": "Selected Items"
   },
-  "admin": {
-    "login": "Admin Login",
-    "password": "Password",
-    "categories": "Category Management",
-    "menus": "Menu Management",
-    "orders": "Order Management",
-    "today": "Today",
-    "thisWeek": "This Week",
-    "thisMonth": "This Month",
-    "orderDetails": "Order Details",
-    "tableNumber": "Table Number",
-    "orderTime": "Order Time",
-    "status": "Status"
+  "MenuPage": {
+    "ClickToViewMenu": "Click to view menu",
+    "GoldMangoSmoothie": "Gold Mango Smoothie",
+    "CocoNutCoffeeSmoothie": "Coconut Coffee Smoothie",
+    "MangoCocoNutJuice": "Mango Coconut Juice",
+    "MangoHibiscusCustard": "Mango Hibiscus Custard",
+    "StrawberryCookieFrappe": "Strawberry Cookie Frappe",
+    "BrownSugarBubbleLatte": "Brown Sugar Bubble Latte",
+    "BrownSugarLatte": "Brown Sugar Latte"
   }
-} 
+}

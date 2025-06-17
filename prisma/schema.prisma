@@ -1,69 +1,31 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+// prisma/schema.prisma
 
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "sqlite" // 또는 PostgreSQL, MySQL 등 사용하는 DB로 변경
   url      = env("DATABASE_URL")
 }
 
 model Category {
-  id        Int      @id @default(autoincrement())
-  nameKo    String
-  nameEn    String
-  order     Int      @default(0)
-  menus     Menu[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id        Int       @id @default(autoincrement())
+  name      String    @unique // 카테고리 이름 (예: 밥류, 음료)
+  order     Int       @default(0) // 정렬 순서
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  menus     MenuItem[] // 1:N 관계
 }
 
-model Menu {
-  id           Int      @id @default(autoincrement())
-  nameKo       String
-  nameEn       String
-  descriptionKo String
-  descriptionEn String
-  price        Int
-  imageUrl     String?
-  order        Int      @default(0)
-  categoryId   Int
-  category     Category @relation(fields: [categoryId], references: [id])
-  orderItems   OrderItem[]
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-}
-
-model Order {
-  id          Int         @id @default(autoincrement())
-  tableNumber Int?
-  isTakeout   Boolean     @default(false)
-  status      OrderStatus @default(PENDING)
-  items       OrderItem[]
-  totalAmount Int
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
-}
-
-model OrderItem {
-  id        Int      @id @default(autoincrement())
-  orderId   Int
-  order     Order    @relation(fields: [orderId], references: [id])
-  menuId    Int
-  menu      Menu     @relation(fields: [menuId], references: [id])
-  quantity  Int
-  price     Int
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-enum OrderStatus {
-  PENDING
-  COMPLETED
-  CANCELLED
+model MenuItem {
+  id          Int      @id @default(autoincrement())
+  name        String
+  price       Int
+  image       String? // 이미지 URL (nullable)
+  description String? // 메뉴 설명 (nullable)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  categoryId  Int
+  category    Category @relation(fields: [categoryId], references: [id]) 
 }
