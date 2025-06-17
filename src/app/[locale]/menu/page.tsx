@@ -6,7 +6,7 @@ import MenuModal from "@/components/menuModal";
 import Cart from "@/components/cart";
 import { Menu } from "@/types/menu.type";
 import { fetchMenusByCategory } from "@/api/menu";
-import { useRouter } from "next/navigation";
+import { useRouter } from '@/i18n/navigation';
 
 interface CartItem {
   id: number;
@@ -23,18 +23,17 @@ const MenuPage = () => {
   const [selectedMenu, setSelectedMenu] = useState<Menu | null>(null);
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
 
-  const [clickCount, ] = useState(0);
+  const [clickCount,setClickCount ] = useState(0);
   const router = useRouter();
 
   useEffect(() => {
     if (clickCount === 5) {
-      
+      router.push('/admin');  
     }
   }, [clickCount, router]);
 
   const handleClick = () => {
-    router.push('/admin');
-    // setClickCount((prev) => prev + 1);
+    setClickCount((prev) => prev + 1);
   };
 
   useEffect(() => {

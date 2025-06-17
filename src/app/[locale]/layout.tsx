@@ -1,9 +1,6 @@
-import { NextIntlClientProvider } from 'next-intl';
-import { locales } from '@/i18n/config';
-
-export function generateStaticParams() {
-  return locales.map((locale) => ({ locale }));
-}
+import { NextIntlClientProvider,hasLocale } from 'next-intl';
+import { getMessages } from 'next-intl/server';
+import { routing } from '@/i18n/routing';
 
 export default async function RootLayout({
   children,
@@ -12,12 +9,15 @@ export default async function RootLayout({
 children: React.ReactNode;
 params: Promise<{ locale: string }>;
 }>) {
-const {locale} = await params;
-
+let {locale} = await params;
+const messages = await getMessages();
+if (!hasLocale(routing.locales, locale)) {
+  locale = "ko";
+}
 
 return (
 <html lang={locale}>
-  <NextIntlClientProvider>
+  <NextIntlClientProvider locale={locale} messages={messages} >
     {children}
   </NextIntlClientProvider>
 </html>
