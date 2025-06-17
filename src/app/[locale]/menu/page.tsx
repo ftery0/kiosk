@@ -6,6 +6,7 @@ import MenuModal from "@/components/menuModal";
 import Cart from "@/components/cart";
 import { Menu } from "@/types/menu.type";
 import { fetchMenusByCategory } from "@/api/menu";
+import { useRouter } from "next/navigation";
 
 interface CartItem {
   id: number;
@@ -21,6 +22,20 @@ const MenuPage = () => {
   const [error, setError] = useState<string | null>(null);
   const [selectedMenu, setSelectedMenu] = useState<Menu | null>(null);
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
+
+  const [clickCount, ] = useState(0);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (clickCount === 5) {
+      
+    }
+  }, [clickCount, router]);
+
+  const handleClick = () => {
+    router.push('/admin');
+    // setClickCount((prev) => prev + 1);
+  };
 
   useEffect(() => {
     const loadMenus = async () => {
@@ -69,7 +84,7 @@ const MenuPage = () => {
 
   return (
     <div className="min-h-screen bg-[var(--background)] text-[var(--foreground)] flex flex-col">
-      <header className="bg-white shadow p-4 text-center text-2xl font-bold">
+      <header className="bg-white cursor-pointer shadow p-4 text-center text-2xl font-bold" onClick={handleClick}>
         kiosk
       </header>
 

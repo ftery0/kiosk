@@ -1,66 +1,76 @@
-import type { NextApiRequest, NextApiResponse } from "next";
-import formidable, { File, Fields, Files, Part } from "formidable";
+// /src/app/api/menus/route.ts
+
+import { NextRequest, NextResponse } from "next/server";
 import path from "path";
+import { writeFile } from "fs/promises"; // fs/promises 사용
 import { prisma } from "@/lib/prisma";
 
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
+/**
+ * 메뉴 목록을 가져오는 API
+ * @param request categoryId (optional)
+ * e.g., /api/menus?categoryId=1
+ */
+export async function GET(request: NextRequest) {
+  const { searchParams } = new URL(request.url);
+  const category = searchParams.get("category");  
 
-const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  if (req.method === "GET") {
-    const category = req.query.category as string | undefined;
-
-    const where = category ? { category } : undefined;
-
-    const menus = await prisma.menu.findMany({ where });
-
-    return res.status(200).json(menus);
-  }
-
-  if (req.method === "POST") {
-    const form = formidable({
-      uploadDir: path.join(process.cwd(), "/public/images"),
-      keepExtensions: true,
-      filename: (name: string, ext: string, part: Part) => {
-        const timestamp = Date.now();
-        return `${timestamp}_${part.originalFilename}`;
+  try {
+    const menus = await prisma.menu.findMany({
+      where: category ? { category } : undefined,
+      orderBy: {
+        createdAt: "desc",
       },
     });
 
-    form.parse(req, async (err: Error | null, fields: Fields, files: Files) => {
-      if (err) return res.status(500).json({ error: "Upload error" });
-
-      const name = fields.name?.[0];
-      const price = parseInt(fields.price?.[0] || "0", 10);
-      const category = fields.category?.[0];
-      const image = files.image?.[0] as File;
-
-      const validCategories = ["밥류", "면류", "음료류"] as const;
-      const isValidCategory = category && validCategories.includes(category as typeof validCategories[number]);
-
-      if (!name || !price || !isValidCategory || !image) {
-        return res.status(400).json({ error: "Missing or invalid fields" });
-      }
-
-      const imagePath = `/images/${path.basename(image.filepath)}`;
-
-      const newMenu = await prisma.menu.create({
-        data: {
-          name,
-          price,
-          category,
-          imagePath,
-        },
-      });
-
-      return res.status(200).json(newMenu);
-    });
+    return NextResponse.json(menus);
+  } catch (error) {
+    console.error("메뉴 조회 실패:", error);
+    return NextResponse.json({ error: "서버 오류가 발생했습니다." }, { status: 500 });
   }
-  return res.status(405).json({ error: "Method Not Allowed" });
+}
 
-};
+/**
+ * 새로운 메뉴를 추가하는 API (이미지 파일 포함)
+ * @param request FormData containing name, price, categoryId, image
+ */
+export async function POST(request: NextRequest) {
+  try {
+    const formData = await request.formData();
 
-export default handler;
+    const name = formData.get("name") as string;
+    const priceStr = formData.get("price") as string;
+    const categoryIdStr = formData.get("categoryId") as string;
+    const imageFile = formData.get("image") as File | null;
+
+    // 1. 필수 필드 검증
+    if (!name || !priceStr || !categoryIdStr || !imageFile) {
+      return NextResponse.json({ error: "필수 항목(name, price, categoryId, image)이 누락되었습니다." }, { status: 400 });
+    }
+
+    // 2. 파일 처리
+    const buffer = Buffer.from(await imageFile.arrayBuffer());
+    const timestamp = Date.now();
+    const filename = `${timestamp}_${imageFile.name.replace(/\s/g, "_")}`; // 공백을 '_'로 변경
+    const savePath = path.join(process.cwd(), "public/images", filename);
+
+    await writeFile(savePath, buffer);
+
+    const imagePath = `/images/${filename}`; // 클라이언트가 접근할 경로
+
+    // 3. 데이터베이스에 저장
+    const newMenu = await prisma.menu.create({
+      data: {
+        name,
+        price: parseInt(priceStr, 10),
+        imagePath: imagePath,
+        category: categoryIdStr,
+      },
+    });
+
+    return NextResponse.json(newMenu, { status: 201 });
+
+  } catch (error) {
+    console.error("메뉴 생성 실패:", error);
+    return NextResponse.json({ error: "메뉴를 생성하는 중 오류가 발생했습니다." }, { status: 500 });
+  }
+}
