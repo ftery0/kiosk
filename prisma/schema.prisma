@@ -30,19 +30,16 @@ model Category {
 
 model Order {
   id         Int         @id @default(autoincrement())
-  tableId    Int
   orderedAt  DateTime    @default(now())
   items      OrderItem[]
 }
 
 model OrderItem {
-  id       Int   @id @default(autoincrement())
-
-  orderId  Int
-  order    Order @relation(fields: [orderId], references: [id])
-
-  menuId   Int
-  menu     Menu  @relation(fields: [menuId], references: [id])
-
-  quantity Int
+  id        Int    @id @default(autoincrement())
+  order     Order  @relation(fields: [orderId], references: [id])
+  orderId   Int
+  menu      Menu   @relation(fields: [menuId], references: [id])
+  menuId    Int
+  quantity  Int
+  totalPrice Int  
 }

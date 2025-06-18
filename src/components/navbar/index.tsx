@@ -13,10 +13,21 @@ const Nav = ({ selectedCategoryId, setSelectedCategoryId }: NavProps) => {
   const [categories, setCategories] = useState<Category[]>([]);
 
   useEffect(() => {
-    fetchCategories()
-      .then(setCategories)
-      .catch(() => setCategories([]));
-  }, []);
+    const loadCategories = async () => {
+      try {
+        const data = await fetchCategories();
+        setCategories(data);
+
+        if (data.length > 0 && selectedCategoryId === null) {
+          setSelectedCategoryId(data[0].id);
+        }
+      } catch {
+        setCategories([]);
+      }
+    };
+
+    loadCategories();
+  }, [selectedCategoryId, setSelectedCategoryId]);
 
   return (
     <nav className="flex justify-center space-x-4 bg-white p-4 border-b">
@@ -24,7 +35,7 @@ const Nav = ({ selectedCategoryId, setSelectedCategoryId }: NavProps) => {
         <button
           key={category.id}
           onClick={() => setSelectedCategoryId(category.id)}
-          className={`px-4 py-2 rounded-full text-sm font-semibold transition-colors ${
+          className={`px-4 py-2 rounded-full text-sm font-semibold transition-colors cursor-pointer ${
             selectedCategoryId === category.id
               ? "bg-[var(--primary)] text-white"
               : "bg-gray-100 text-[var(--foreground)]"

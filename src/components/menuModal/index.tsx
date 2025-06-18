@@ -31,14 +31,14 @@ const MenuModal = ({ menu, onClose, onAddToCart }: MenuModalProps) => {
 
         <div className="flex justify-center items-center menus-center space-x-4 mb-6">
           <button
-            className="btn btn-outline"
+            className="btn btn-outline cursor-pointer"
             onClick={() => setQuantity(Math.max(1, quantity - 1))}
           >
             -
           </button>
           <span className="text-lg font-semibold">{quantity}</span>
           <button
-            className="btn btn-outline"
+            className="btn btn-outline cursor-pointer"
             onClick={() => setQuantity(quantity + 1)}
           >
             +
@@ -47,7 +47,7 @@ const MenuModal = ({ menu, onClose, onAddToCart }: MenuModalProps) => {
 
         <div className="flex  gap-1">
           <button
-            className="btn btn-secondary p-1 cursor-pointer"
+            className="btn btn-secondary flex-1/5 cursor-pointer"
             onClick={() => {
               onAddToCart(menu, quantity);
               onClose();
