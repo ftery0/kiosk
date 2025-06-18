@@ -1,21 +1,48 @@
-// prisma/schema.prisma
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "mysql" 
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
 model Menu {
-  id        Int      @id @default(autoincrement())
-  name      String
-  price     Int
-  category  String   
-  imagePath String
-  createdAt DateTime @default(now())
+  id          Int          @id @default(autoincrement())
+  name        String
+  price       Int
+  imagePath   String
+  createdAt   DateTime     @default(now())
+  
+  categoryId  Int
+  category    Category     @relation("CategoryMenus", fields: [categoryId], references: [id])
+
+  orderItems  OrderItem[]
 }
 
+model Category {
+  id        Int      @id @default(autoincrement())
+  name      String
+  order     Int
+  createdAt DateTime @default(now())
+  menus     Menu[]   @relation("CategoryMenus")
+}
 
+model Order {
+  id         Int         @id @default(autoincrement())
+  tableId    Int
+  orderedAt  DateTime    @default(now())
+  items      OrderItem[]
+}
+
+model OrderItem {
+  id       Int   @id @default(autoincrement())
+
+  orderId  Int
+  order    Order @relation(fields: [orderId], references: [id])
+
+  menuId   Int
+  menu     Menu  @relation(fields: [menuId], references: [id])
+
+  quantity Int
+}

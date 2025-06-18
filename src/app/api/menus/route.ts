@@ -12,15 +12,21 @@ import { prisma } from "@/lib/prisma";
  */
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
-  const category = searchParams.get("category");  
+  const categoryIdStr = searchParams.get("categoryId");
+  const where = categoryIdStr
+  ? { categoryId: Number(categoryIdStr) }
+  : undefined;
 
-  try {
-    const menus = await prisma.menu.findMany({
-      where: category ? { category } : undefined,
-      orderBy: {
-        createdAt: "desc",
-      },
-    });
+  try {  
+  const menus = await prisma.menu.findMany({
+    where,
+    orderBy: {
+      createdAt: "desc",
+    },
+    include: {
+      category: true,
+    },
+  });
 
     return NextResponse.json(menus);
   } catch (error) {
@@ -55,15 +61,19 @@ export async function POST(request: NextRequest) {
 
     await writeFile(savePath, buffer);
 
-    const imagePath = `/images/${filename}`; // 클라이언트가 접근할 경로
+    const imagePath = `/images/${filename}`; 
 
     // 3. 데이터베이스에 저장
     const newMenu = await prisma.menu.create({
       data: {
         name,
         price: parseInt(priceStr, 10),
-        imagePath: imagePath,
-        category: categoryIdStr,
+        imagePath,
+        category: {
+          connect: {
+            id: parseInt(categoryIdStr, 10),
+          },
+        },
       },
     });
 

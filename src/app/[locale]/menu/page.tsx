@@ -16,8 +16,8 @@ interface CartItem {
 }
 
 const MenuPage = () => {
-  const [selectedCategory, setSelectedCategory] = useState("밥류");
-  const [menus, setMenus] = useState<Menu[]>([]); 
+  const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
+  const [menus, setMenus] = useState<Menu[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [selectedMenu, setSelectedMenu] = useState<Menu | null>(null);
@@ -28,21 +28,25 @@ const MenuPage = () => {
 
   useEffect(() => {
     if (clickCount === 5) {
-      router.push('/admin');  
+      router.push('/admin', undefined,);
     }
   }, [clickCount, router]);
 
   const handleClick = () => {
     setClickCount((prev) => prev + 1);
   };
-
+  
   useEffect(() => {
     const loadMenus = async () => {
       setLoading(true);
       setError(null);
       try {
-        const data = await fetchMenusByCategory(selectedCategory);
-        setMenus(data);
+        if (selectedCategoryId !== null) {
+          const data = await fetchMenusByCategory(selectedCategoryId);
+          setMenus(data);
+        } else {
+          setMenus([]);
+        }
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (err) {
         setError("메뉴를 불러오는 데 실패했습니다.");
@@ -50,9 +54,9 @@ const MenuPage = () => {
         setLoading(false);
       }
     };
-
+  
     loadMenus();
-  }, [selectedCategory]);
+  }, [selectedCategoryId]);
 
   const handleAddToCart = (menu: Menu, quantity: number) => {
     setCartItems((prev) => {
@@ -81,6 +85,11 @@ const MenuPage = () => {
     );
   };
 
+
+  const removeItem = (id: number) => {
+    setCartItems((prev) => prev.filter((item) => item.id !== id));
+  };
+
   return (
     <div className="min-h-screen bg-[var(--background)] text-[var(--foreground)] flex flex-col">
       <header className="bg-white cursor-pointer shadow p-4 text-center text-2xl font-bold" onClick={handleClick}>
@@ -88,15 +97,11 @@ const MenuPage = () => {
       </header>
 
       <Nav
-        selectedCategory={selectedCategory}
-        setSelectedCategory={setSelectedCategory}
+        selectedCategoryId={selectedCategoryId}
+        setSelectedCategoryId={setSelectedCategoryId}
       />
 
       <main className="flex-1 p-6">
-        <h2 className="text-xl font-semibold mb-4 text-[var(--primary)] text-center">
-          {selectedCategory} 메뉴
-        </h2>
-
         {loading && <p className="text-center">메뉴를 불러오는 중입니다...</p>}
         {error && <p className="text-center text-red-500">{error}</p>}
         {!loading && !error && menus.length === 0 && (
@@ -106,7 +111,11 @@ const MenuPage = () => {
         <MenuList menus={menus} onSelectMenu={setSelectedMenu} />
       </main>
 
-      <Cart cartItems={cartItems} updateQuantity={updateQuantity} />
+      <Cart
+        cartItems={cartItems}
+        updateQuantity={updateQuantity}
+        removeItem={removeItem} 
+      />
 
       {selectedMenu && (
         <MenuModal
