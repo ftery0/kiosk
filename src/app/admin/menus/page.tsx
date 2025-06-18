@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 
-const Admin = () => {
+const AdminMenu = () => {
   const [name, setName] = useState('');
   const [price, setPrice] = useState('');
   const [category, setCategory] = useState('밥류');
@@ -106,4 +106,4 @@ const Admin = () => {
   );
 };
 
-export default Admin;
+export default AdminMenu;
