@@ -1,9 +1,10 @@
 "use client";
 import { useRouter } from '@/i18n/navigation';
-
+import { useTranslations } from 'next-intl';
 
 export default function HomePage() {
   const router = useRouter();
+  const t = useTranslations("HomePage");
 
   const handleSelection = () => {
     router.push('/menu');
@@ -20,26 +21,40 @@ export default function HomePage() {
         <h1 className="text-4xl font-bold mb-8"
             style={{ color: 'var(--foreground)' }} 
         >
-          주문 방법을 선택해주세요
+          {t('title')}
         </h1>
 
         <div className="space-y-6">
           <button
             onClick={handleSelection}
-            
             className="w-full btn btn-primary font-bold py-6 px-4 rounded-lg text-3xl transition duration-300 ease-in-out transform hover:scale-105 shadow-lg cursor-pointer"
           >
-            매장 이용
+            {t('dineIn')}
           </button>
 
           <button
             onClick={handleSelection}
-            
             className="w-full btn btn-secondary font-bold py-6 px-4 rounded-lg text-3xl transition duration-300 ease-in-out transform hover:scale-105 shadow-lg cursor-pointer"
           >
-            포장
+            {t('takeOut')}
           </button>
         </div>
+      </div>
+
+      
+      <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 flex gap-3">
+        <button
+          onClick={() => router.push('/', { locale: 'ko' })}
+          className="text-sm px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 shadow cursor-pointer"
+        >
+          한국어
+        </button>
+        <button
+          onClick={() => router.push('/', { locale: 'en' })}
+          className="text-sm px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 shadow cursor-pointer"
+        >
+          English
+        </button>
       </div>
     </div>
   );

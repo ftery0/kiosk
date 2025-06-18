@@ -1,34 +1,32 @@
 {
-  "Common": {
-    "Menu": "메뉴",
-    "Category": "카테고리",
-    "KoreanFood": "한식",
-    "Drinks": "음료",
-    "Noodles": "면류",
-    "Desserts": "디저트",
-    "AddToCart": "담기",
-    "Cart": "장바구니",
-    "Quantity": "수량",
-    "Delete": "삭제",
-    "ClearAll": "전체 삭제",
-    "TotalAmount": "총 금액",
-    "Checkout": "결제하기",
-    "PaymentComplete": "결제가 완료되었습니다.",
-    "NoImage": "이미지 없음",
-    "Loading": "로딩 중...",
-    "TimeRemaining": "남은시간",
-    "seconds": "초",
-    "AllDelete": "전체삭제",
-    "SelectedItems": "선택한 상품"
+  "HomePage": {
+    "title": "주문 방법을 선택해주세요",
+    "dineIn": "매장 이용",
+    "takeOut": "포장"
   },
   "MenuPage": {
-    "ClickToViewMenu": "메뉴를 보시려면 클릭해주세요",
-    "GoldMangoSmoothie": "골드망고 스무디",
-    "CocoNutCoffeeSmoothie": "코코넛 커피 스무디",
-    "MangoCocoNutJuice": "망고 코코넛 주스",
-    "MangoHibiscusCustard": "망고 히비스커스 커스터드",
-    "StrawberryCookieFrappe": "딸기 쿠키 프라페",
-    "BrownSugarBubbleLatte": "흑당 버블 라떼",
-    "BrownSugarLatte": "흑당 라떼"
+    "loadingMenus": "메뉴를 불러오는 중입니다...",
+    "errorLoadingMenus": "메뉴를 불러오는 데 실패했습니다.",
+    "emptyMenus": "해당 카테고리의 메뉴가 없습니다."
+  },
+  "Cart": {
+    "title": "장바구니",
+    "empty": "장바구니가 비어 있습니다.",
+    "paymentInfo": "결제 정보",
+    "total": "총 금액",
+    "purchase": "구매하기",
+    "orderSuccess": "접수되었습니다.",
+    "orderFailed": "구매 실패",
+    "removeItem": "장바구니 아이템 삭제",
+    "won":"원",
+    "timeoutMessage": "시간 초과로 인해 장바구니가 초기화됩니다."
+
+  },
+  "MenuModal": {
+    "addToCart": "장바구니에 담기",
+    "cancel": "취소",
+    "decreaseQuantity": "수량 감소",
+    "increaseQuantity": "수량 증가",
+    "won":"원"
   }
 }

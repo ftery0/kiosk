@@ -17,9 +17,11 @@ if (!hasLocale(routing.locales, locale)) {
 
 return (
 <html lang={locale}>
+  <body>
   <NextIntlClientProvider locale={locale} messages={messages} >
     {children}
   </NextIntlClientProvider>
+  </body>
 </html>
 );
 }

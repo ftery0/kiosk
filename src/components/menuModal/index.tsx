@@ -2,15 +2,17 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { Menu } from "@/types/menu.type";
+import { useTranslations } from "next-intl";
 
 interface MenuModalProps {
-    menu: Menu;
-    onClose: () => void;
-    onAddToCart: (menu: Menu, quantity: number) => void;
-  }
+  menu: Menu;
+  onClose: () => void;
+  onAddToCart: (menu: Menu, quantity: number) => void;
+}
 
 const MenuModal = ({ menu, onClose, onAddToCart }: MenuModalProps) => {
   const [quantity, setQuantity] = useState(1);
+  const t = useTranslations("MenuModal");
 
   const totalPrice = menu.price * quantity;
 
@@ -26,13 +28,14 @@ const MenuModal = ({ menu, onClose, onAddToCart }: MenuModalProps) => {
         />
         <h2 className="text-xl font-bold mb-2">{menu.name}</h2>
         <p className="text-[var(--primary)] font-semibold mb-4">
-          {totalPrice.toLocaleString()}원
+          {totalPrice.toLocaleString()+" "+t("won")}
         </p>
 
-        <div className="flex justify-center items-center menus-center space-x-4 mb-6">
+        <div className="flex justify-center items-center space-x-4 mb-6">
           <button
             className="btn btn-outline cursor-pointer"
             onClick={() => setQuantity(Math.max(1, quantity - 1))}
+            aria-label={t("decreaseQuantity")}
           >
             -
           </button>
@@ -40,12 +43,13 @@ const MenuModal = ({ menu, onClose, onAddToCart }: MenuModalProps) => {
           <button
             className="btn btn-outline cursor-pointer"
             onClick={() => setQuantity(quantity + 1)}
+            aria-label={t("increaseQuantity")}
           >
             +
           </button>
         </div>
 
-        <div className="flex  gap-1">
+        <div className="flex gap-1">
           <button
             className="btn btn-secondary flex-1/5 cursor-pointer"
             onClick={() => {
@@ -53,10 +57,13 @@ const MenuModal = ({ menu, onClose, onAddToCart }: MenuModalProps) => {
               onClose();
             }}
           >
-            장바구니에 담기
+            {t("addToCart")}
           </button>
-          <button className="btn btn-outline flex-1 cursor-pointer" onClick={onClose}>
-            취소
+          <button
+            className="btn btn-outline flex-1 cursor-pointer"
+            onClick={onClose}
+          >
+            {t("cancel")}
           </button>
         </div>
       </div>

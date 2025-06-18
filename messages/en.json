@@ -1,34 +1,32 @@
 {
-  "Common": {
-    "Menu": "Menu",
-    "Category": "Category",
-    "KoreanFood": "Korean Food",
-    "Drinks": "Drinks",
-    "Noodles": "Noodles",
-    "Desserts": "Desserts",
-    "AddToCart": "Add",
-    "Cart": "Cart",
-    "Quantity": "Quantity",
-    "Delete": "Delete",
-    "ClearAll": "Clear All",
-    "TotalAmount": "Total Amount",
-    "Checkout": "Checkout",
-    "PaymentComplete": "Payment completed.",
-    "NoImage": "No Image",
-    "Loading": "Loading...",
-    "TimeRemaining": "Time Remaining",
-    "seconds": "s",
-    "AllDelete": "Delete All",
-    "SelectedItems": "Selected Items"
+  "HomePage": {
+    "title": "Please select your order type",
+    "dineIn": "Dine In",
+    "takeOut": "Take Out"
   },
   "MenuPage": {
-    "ClickToViewMenu": "Click to view menu",
-    "GoldMangoSmoothie": "Gold Mango Smoothie",
-    "CocoNutCoffeeSmoothie": "Coconut Coffee Smoothie",
-    "MangoCocoNutJuice": "Mango Coconut Juice",
-    "MangoHibiscusCustard": "Mango Hibiscus Custard",
-    "StrawberryCookieFrappe": "Strawberry Cookie Frappe",
-    "BrownSugarBubbleLatte": "Brown Sugar Bubble Latte",
-    "BrownSugarLatte": "Brown Sugar Latte"
+    "loadingMenus": "Loading menus...",
+    "errorLoadingMenus": "Failed to load menus.",
+    "emptyMenus": "No menus found in this category."
+  },
+  "Cart": {
+    "title": "Cart",
+    "empty": "Your cart is empty.",
+    "paymentInfo": "Payment Info",
+    "total": "Total",
+    "purchase": "Purchase",
+    "orderSuccess": "Your order has been placed.",
+    "orderFailed": "Purchase failed.",
+    "removeItem": "Remove item from cart",
+    "won":"won",
+    "timeoutMessage":"Your shopping cart will be reset due to timeout."
+  },
+  "MenuModal": {
+    "addToCart": "Add to Cart",
+    "cancel": "Cancel",
+    "decreaseQuantity": "Decrease quantity",
+    "increaseQuantity": "Increase quantity",
+    "won":"won"
   }
+
 }

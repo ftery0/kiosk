@@ -1,12 +1,13 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react"; // useCallback 추가
+import { useRouter } from "next/navigation"; // 페이지 이동을 위해 useRouter 추가
 import Nav from "@/components/navbar";
 import MenuList from "@/components/MenuList";
 import MenuModal from "@/components/menuModal";
 import Cart from "@/components/cart";
 import { Menu } from "@/types/menu.type";
 import { fetchMenusByCategory } from "@/api/menu";
-
+import { useTranslations } from "next-intl";
 
 interface CartItem {
   id: number;
@@ -22,9 +23,11 @@ const MenuPage = () => {
   const [error, setError] = useState<string | null>(null);
   const [selectedMenu, setSelectedMenu] = useState<Menu | null>(null);
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const [clickCount, setClickCount] = useState(0);
 
-  const [clickCount,setClickCount ] = useState(0);
-  
+  const t = useTranslations("MenuPage");
+
+
   useEffect(() => {
     if (clickCount === 5) {
       window.location.href = "/admin";
@@ -34,7 +37,7 @@ const MenuPage = () => {
   const handleClick = () => {
     setClickCount((prev) => prev + 1);
   };
-  
+
   useEffect(() => {
     const loadMenus = async () => {
       setLoading(true);
@@ -46,16 +49,15 @@ const MenuPage = () => {
         } else {
           setMenus([]);
         }
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (err) {
-        setError("메뉴를 불러오는 데 실패했습니다.");
+        setError(t("errorLoadingMenus"));
       } finally {
         setLoading(false);
       }
     };
-  
+
     loadMenus();
-  }, [selectedCategoryId]);
+  }, [selectedCategoryId, t]);
 
   const handleAddToCart = (menu: Menu, quantity: number) => {
     setCartItems((prev) => {
@@ -84,14 +86,16 @@ const MenuPage = () => {
     );
   };
 
-
   const removeItem = (id: number) => {
     setCartItems((prev) => prev.filter((item) => item.id !== id));
   };
 
   return (
     <div className="min-h-screen bg-[var(--background)] text-[var(--foreground)] flex flex-col">
-      <header className="bg-white cursor-pointer shadow p-4 text-center text-2xl font-bold" onClick={handleClick}>
+      <header
+        className="bg-white cursor-pointer shadow p-4 text-center text-2xl font-bold"
+        onClick={handleClick}
+      >
         kiosk
       </header>
 
@@ -101,10 +105,10 @@ const MenuPage = () => {
       />
 
       <main className="flex-1 p-6">
-        {loading && <p className="text-center">메뉴를 불러오는 중입니다...</p>}
+        {loading && <p className="text-center">{t("loadingMenus")}</p>}
         {error && <p className="text-center text-red-500">{error}</p>}
         {!loading && !error && menus.length === 0 && (
-          <p className="text-center">해당 카테고리의 메뉴가 없습니다.</p>
+          <p className="text-center">{t("emptyMenus")}</p>
         )}
 
         <MenuList menus={menus} onSelectMenu={setSelectedMenu} />
@@ -113,7 +117,7 @@ const MenuPage = () => {
       <Cart
         cartItems={cartItems}
         updateQuantity={updateQuantity}
-        removeItem={removeItem} 
+        removeItem={removeItem}
       />
 
       {selectedMenu && (
