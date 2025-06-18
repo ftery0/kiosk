@@ -118,7 +118,7 @@ const MenuModal = ({ onClose, onSuccess }: Props) => {
                 const file = e.target.files?.[0];
                 if (file) setImage(file);
               }}
-              className="w-full"
+              className="w-full cursor-pointer"
               required
             />
           </div>
@@ -126,13 +126,13 @@ const MenuModal = ({ onClose, onSuccess }: Props) => {
             <button
               type="button"
               onClick={onClose}
-              className="bg-gray-300 text-black px-4 py-2 rounded"
+              className="bg-gray-300 text-black px-4 py-2 rounded cursor-pointer"
             >
               취소
             </button>
             <button
               type="submit"
-              className="bg-blue-600 text-white px-4 py-2 rounded"
+              className="bg-blue-600 text-white px-4 py-2 rounded cursor-pointer"
             >
               추가하기
             </button>
