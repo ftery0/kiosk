@@ -6,7 +6,7 @@ import MenuModal from "@/components/menuModal";
 import Cart from "@/components/cart";
 import { Menu } from "@/types/menu.type";
 import { fetchMenusByCategory } from "@/api/menu";
-import { useRouter } from '@/i18n/navigation';
+
 
 interface CartItem {
   id: number;
@@ -24,13 +24,12 @@ const MenuPage = () => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
 
   const [clickCount,setClickCount ] = useState(0);
-  const router = useRouter();
-
+  
   useEffect(() => {
     if (clickCount === 5) {
-      router.push('/admin', undefined,);
+      window.location.href = "/admin";
     }
-  }, [clickCount, router]);
+  }, [clickCount]);
 
   const handleClick = () => {
     setClickCount((prev) => prev + 1);

@@ -1,10 +1,13 @@
-const Admin = () => {
-return(
-    <>
-    hello world
-    </>
-)
-}
 
+import { redirect } from 'next/navigation';
+
+
+
+const Admin = () => {
+  
+  redirect('/admin/categories');
+
+  
+};
 
 export default Admin;
