@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { unlink, writeFile } from 'fs/promises';
+import { writeFile } from 'fs/promises';
 import path from 'path';
 
 
@@ -48,37 +48,17 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
 
 
 export async function DELETE(_: NextRequest, { params }: { params: { id: string } }) {
-    const id = parseInt(params.id);
-    if (isNaN(id)) return NextResponse.json({ error: "유효하지 않은 ID" }, { status: 400 });
-  
-    try {
-      
-      const menu = await prisma.menu.findUnique({
-        where: { id },
-        select: { imagePath: true },
-      });
-  
-      if (!menu) {
-        return NextResponse.json({ error: "메뉴를 찾을 수 없습니다." }, { status: 404 });
-      }
-  
-      
-      if (menu.imagePath) {
-        const imageFilePath = path.join(process.cwd(), "public", menu.imagePath);
-        try {
-          await unlink(imageFilePath); 
-        } catch (err) {
-          console.warn(`이미지 파일 삭제 실패: ${imageFilePath}`, err);
-          
-        }
-      }
-  
-      
-      await prisma.menu.delete({ where: { id } });
-  
-      return new NextResponse(null, { status: 204 });
-    } catch (error) {
-      console.error("메뉴 삭제 실패:", error);
-      return NextResponse.json({ error: "삭제 중 오류 발생" }, { status: 500 });
-    }
+  const id = parseInt(params.id);
+  if (isNaN(id)) return NextResponse.json({ error: '유효하지 않은 ID' }, { status: 400 });
+
+  try {
+    await prisma.menu.delete({
+      where: { id },
+    });
+
+    return new NextResponse(null, { status: 204 });
+  } catch (error) {
+    console.error('메뉴 삭제 실패:', error);
+    return NextResponse.json({ error: '삭제 중 오류 발생' }, { status: 500 });
   }
+}
