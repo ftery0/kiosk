@@ -1,8 +1,6 @@
-// /src/app/api/menus/route.ts
-
 import { NextRequest, NextResponse } from "next/server";
 import path from "path";
-import { writeFile } from "fs/promises"; // fs/promises 사용
+import { writeFile } from "fs/promises"; 
 import { prisma } from "@/lib/prisma";
 
 /**
