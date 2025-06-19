@@ -84,7 +84,7 @@ const Orders = () => {
         <p style={{ color: "var(--secondary)" }}>주문 내역이 없습니다.</p>
       )}
 
-      <div className="space-y-6 scroll-auto h-auto overflow-auto">
+      <div className="space-y-6 max-h-[600px] overflow-y-auto">
         {sortedOrders.map((order) => {
           const total = order.items.reduce(
             (acc, item) => acc + item.menu.price * item.quantity,
