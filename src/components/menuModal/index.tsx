@@ -51,7 +51,7 @@ const MenuModal = ({ menu, onClose, onAddToCart }: MenuModalProps) => {
 
         <div className="flex gap-1">
           <button
-            className="btn btn-secondary flex-1/5 cursor-pointer"
+            className="btn-primary btn flex-1/5 cursor-pointer"
             onClick={() => {
               onAddToCart(menu, quantity);
               onClose();

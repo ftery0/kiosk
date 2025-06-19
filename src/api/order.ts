@@ -11,6 +11,8 @@ export async function fetchOrders(period: "today" | "week" | "month" | "all" = "
     items: { id: number; quantity: number }[],
     type: "DINE_IN" | "TAKE_OUT"
   ) {
+    console.log("sdsds");
+    
     const res = await fetch("/api/orders", {
       method: "POST",
       headers: {

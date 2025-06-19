@@ -32,7 +32,7 @@ export default function HomePage() {
         <button
           onClick={() => handleSelection("DINE_IN")}
           className="flex flex-col items-center justify-center w-1/2 bg-primary text-white rounded-lg p-6 mx-2
-                     hover:bg-primary-dark transition duration-300 cursor-pointer"
+                     hover:bg-primary-dark transition duration-300 cursor-pointer hover:translate-y-[-4px]"
         >
           <FaUtensils size={48} className="mb-3" />
           <span className="text-2xl font-bold">{t('dineIn')}</span>
@@ -41,7 +41,7 @@ export default function HomePage() {
         <button
           onClick={() => handleSelection("TAKE_OUT")}
           className="flex flex-col items-center justify-center w-1/2 bg-secondary text-white rounded-lg p-6 mx-2
-                     hover:bg-secondary-dark transition duration-300 cursor-pointer"
+                     hover:bg-secondary-dark transition duration-300 cursor-pointer hover:translate-y-[-4px]"
         >
           <FaShoppingBag size={48} className="mb-3" />
           <span className="text-2xl font-bold">{t('takeOut')}</span>

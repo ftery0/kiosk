@@ -83,17 +83,22 @@ const Cart = ({ cartItems, updateQuantity, removeItem }: CartProps) => {
 
   const handlePurchase = async () => {
     try {
+      
+      console.log("현재 orderType:", orderType);
       if (!orderType) {
         alert("이용 유형이 선택되지 않았습니다.");
+        router.push("/");
         return;
       }
-  
+      
       const items = cartItems.map((item) => ({
         id: item.id,
         quantity: item.quantity,
       }));
-  
+      
       await fetchCreateOrder(items, orderType);
+      
+      
       alert(t("orderSuccess"));
       cartItems.forEach((item) => removeItem(item.id));
       router.push("/");

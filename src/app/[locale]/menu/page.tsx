@@ -92,7 +92,7 @@ const MenuPage = () => {
   return (
     <div className="min-h-screen bg-[var(--background)] text-[var(--foreground)] flex flex-col">
       <header
-        className="bg-white cursor-pointer shadow p-4 text-center text-2xl font-bold"
+        className="bg-white cursor-pointer shadow p-4 text-center text-2xl font-bold text-[var(--primary)]"
         onClick={handleClick}
       >
         kiosk

@@ -90,12 +90,15 @@ const Categories = () => {
   };
 
   const handleDelete = async (id: number) => {
-    if (!confirm("정말 삭제하시겠습니까?")) return;
     try {
       await deleteCategory(id);
       loadCategories();
-    } catch {
-      alert("삭제 실패");
+    } catch (error: any) {
+      if (error.status === 400) {
+        alert(error.message); 
+      } else {
+        alert("삭제 실패");
+      }
     }
   };
 
@@ -104,7 +107,7 @@ const Categories = () => {
       <h1 className="text-2xl font-bold mb-4">카테고리 관리</h1>
 
       <button
-        className="bg-blue-500 text-white px-4 py-2 rounded mb-4 cursor-pointer"
+        className=" btn-primary text-white px-4 py-2 rounded mb-4 cursor-pointer"
         onClick={() => setShowModal(true)}
       >
         카테고리 추가
@@ -134,10 +137,10 @@ const Categories = () => {
               onChange={(e) => setEditingName(e.target.value)}
               className="border px-2"
             />
-            <button onClick={() => handleUpdate(cat.id)} className="bg-green-500 text-white px-2 rounded">
+            <button onClick={() => handleUpdate(cat.id)} className="bg-green-500 text-white px-2 rounded cursor-pointer">
               저장
             </button>
-            <button onClick={() => setEditingId(null)} className="text-gray-500">
+            <button onClick={() => setEditingId(null)} className="text-gray-500 cursor-pointer">
               취소
             </button>
           </>
@@ -152,10 +155,10 @@ const Categories = () => {
             <button onClick={() => {
               setEditingId(cat.id);
               setEditingName(cat.name);
-            }} className="bg-yellow-400 text-white px-2 rounded">
+            }} className="bg-yellow-400 text-white px-2 rounded cursor-pointer">
               수정
             </button>
-            <button onClick={() => handleDelete(cat.id)} className="bg-red-500 text-white px-2 rounded">
+            <button onClick={() => handleDelete(cat.id)} className="bg-red-500 text-white px-2 rounded cursor-pointer">
               삭제
             </button>
           </>

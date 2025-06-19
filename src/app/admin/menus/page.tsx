@@ -5,7 +5,7 @@ import MenuModal from "@/components/adminModal/menuModal";
 import { fetchCategories } from "@/api/category";
 import { Category } from "@/types/category.type";
 import { Menu } from "@/types/menu.type";
-import { fetchMenusByCategory, updateMenuOrder } from "@/api/menu";
+import { deleteMenu, fetchMenusByCategory, updateMenuOrder } from "@/api/menu";
 import Image from "next/image";
 
 const AdminMenuPage = () => {
@@ -87,6 +87,19 @@ const AdminMenuPage = () => {
     setShowModal(true); 
   };
 
+  const handleDeleteMenu = async (id: number) => {
+    if (!confirm("정말 삭제하시겠습니까?")) return;
+    try {
+      await deleteMenu(id);
+      if (selectedCategoryId !== null) {
+        loadMenus(selectedCategoryId);
+      }
+      alert("메뉴가 삭제되었습니다.");
+    } catch (error) {
+      alert("메뉴 삭제 실패");
+    }
+  };
+
   return (
     <div className="max-w-3xl mx-auto py-10">
       <h1 className="text-3xl font-bold mb-4">메뉴 관리</h1>
@@ -136,6 +149,12 @@ const AdminMenuPage = () => {
               >
                 수정
               </button>
+              <button
+              onClick={() => handleDeleteMenu(menu.id)}
+              className="bg-red-500 text-white px-2 rounded cursor-pointer"
+            >
+              삭제
+            </button>
             </li>
           ))}
         </ul>

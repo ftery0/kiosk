@@ -28,5 +28,11 @@ export const fetchCategories = async (): Promise<Category[]> => {
     const res = await fetch(`/api/categories/${id}`, {
       method: "DELETE",
     });
-    if (!res.ok) throw new Error("카테고리 삭제 실패");
+  
+    if (!res.ok) {
+      const errorData = await res.json();
+      const error = new Error(errorData.error || "카테고리 삭제 실패");
+      (error as any).status = res.status;  
+      throw error;
+    }
   };
