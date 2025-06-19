@@ -1,6 +1,6 @@
 "use client";
 import { fetchCreateOrder } from "@/api/order";
-import React, { useEffect, useState, useRef, useCallback } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
