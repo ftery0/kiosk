@@ -2,6 +2,7 @@
 import { useRouter } from '@/i18n/navigation';
 import { OrderType, useOrderTypeStore } from '@/store/useOrderTypeStore';
 import { useTranslations } from 'next-intl';
+import { FaUtensils, FaShoppingBag } from "react-icons/fa"; 
 
 export default function HomePage() {
   const router = useRouter();
@@ -27,20 +28,24 @@ export default function HomePage() {
           {t('title')}
         </h1>
 
-        <div className="space-y-6">
-          <button
-           onClick={() => handleSelection("DINE_IN")}
-            className="w-full btn btn-primary font-bold py-6 px-4 rounded-lg text-3xl transition duration-300 ease-in-out transform hover:scale-105 shadow-lg cursor-pointer"
-          >
-            {t('dineIn')}
-          </button>
+        <div className="text-center flex justify-between">
+        <button
+          onClick={() => handleSelection("DINE_IN")}
+          className="flex flex-col items-center justify-center w-1/2 bg-primary text-white rounded-lg p-6 mx-2
+                     hover:bg-primary-dark transition duration-300 cursor-pointer"
+        >
+          <FaUtensils size={48} className="mb-3" />
+          <span className="text-2xl font-bold">{t('dineIn')}</span>
+        </button>
 
-          <button
-           onClick={() => handleSelection("TAKE_OUT")}
-            className="w-full btn btn-secondary font-bold py-6 px-4 rounded-lg text-3xl transition duration-300 ease-in-out transform hover:scale-105 shadow-lg cursor-pointer"
-          >
-            {t('takeOut')}
-          </button>
+        <button
+          onClick={() => handleSelection("TAKE_OUT")}
+          className="flex flex-col items-center justify-center w-1/2 bg-secondary text-white rounded-lg p-6 mx-2
+                     hover:bg-secondary-dark transition duration-300 cursor-pointer"
+        >
+          <FaShoppingBag size={48} className="mb-3" />
+          <span className="text-2xl font-bold">{t('takeOut')}</span>
+        </button>
         </div>
       </div>
 
