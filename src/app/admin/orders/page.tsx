@@ -28,6 +28,8 @@ const Orders = () => {
     loadOrders();
   }, [period]);
 
+  
+
   const sortedOrders = useMemo(() => {
     return [...orders].sort((a, b) => {
       const timeA = new Date(a.orderedAt).getTime();
@@ -36,11 +38,25 @@ const Orders = () => {
     });
   }, [orders, sortOrder]);
 
+  const totalAmountAll = useMemo(() => {
+    return sortedOrders.reduce((sum, order) => {
+      const totalOrderPrice = order.items.reduce(
+        (acc, item) => acc + item.menu.price * item.quantity,
+        0
+      );
+      return sum + totalOrderPrice;
+    }, 0);
+  }, [sortedOrders]);
+
   return (
     <div className="max-w-4xl mx-auto p-6">
       <h1 className="text-3xl font-bold mb-6" style={{ color: "var(--primary)" }}>
         주문 내역
       </h1>
+
+      <div className="mb-6 text-right font-semibold text-xl text-[var(--primary)]">
+        총 매출: {totalAmountAll.toLocaleString()}원
+      </div>
 
       <div className="mb-6 flex flex-wrap gap-3 justify-between items-center">
         <div className="flex gap-2">
