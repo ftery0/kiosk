@@ -4,6 +4,8 @@ import React, { useEffect, useState, useRef, useCallback } from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
+import { useOrderTypeStore } from "@/store/useOrderTypeStore";
+
 
 interface CartItem {
   id: number;
@@ -21,7 +23,7 @@ interface CartProps {
 const Cart = ({ cartItems, updateQuantity, removeItem }: CartProps) => {
   const router = useRouter();
   const t = useTranslations("Cart");
-
+  const { orderType } = useOrderTypeStore();
   const [timeLeft, setTimeLeft] = useState<number>(60);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -63,10 +65,10 @@ const Cart = ({ cartItems, updateQuantity, removeItem }: CartProps) => {
   }, []);
 
   useEffect(() => {
-    // 사용자가 움직이지 않으면 타이머 시작
+  
     const inactivityTimeout = setTimeout(() => {
       startTimer();
-    }, 1000); // 1초 후 타이머 시작
+    }, 1000); 
 
     return () => {
       clearTimeout(inactivityTimeout);
@@ -81,12 +83,17 @@ const Cart = ({ cartItems, updateQuantity, removeItem }: CartProps) => {
 
   const handlePurchase = async () => {
     try {
+      if (!orderType) {
+        alert("이용 유형이 선택되지 않았습니다.");
+        return;
+      }
+  
       const items = cartItems.map((item) => ({
         id: item.id,
         quantity: item.quantity,
       }));
-
-      await fetchCreateOrder(items);
+  
+      await fetchCreateOrder(items, orderType);
       alert(t("orderSuccess"));
       cartItems.forEach((item) => removeItem(item.id));
       router.push("/");

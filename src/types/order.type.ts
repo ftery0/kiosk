@@ -10,4 +10,7 @@ export interface OrderItem {
     id: number;
     orderedAt: string;
     items: OrderItem[];
+    type:orderType;
   }
+
+  type orderType = 'DINE_IN'|'TAKE_OUT';

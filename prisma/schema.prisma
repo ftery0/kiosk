@@ -31,6 +31,7 @@ model Order {
   id         Int         @id @default(autoincrement()) @map("order_id")
   orderedAt  DateTime    @default(now())
   items      OrderItem[]
+  type       OrderType   @default(DINE_IN)
 }
 
 model OrderItem {
@@ -42,4 +43,9 @@ model OrderItem {
 
   order      Order    @relation(fields: [orderId], references: [id])
   menu       Menu     @relation(fields: [menuId], references: [id])
+}
+
+enum OrderType {
+  DINE_IN
+  TAKE_OUT
 }

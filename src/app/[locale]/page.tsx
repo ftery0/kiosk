@@ -1,13 +1,16 @@
 "use client";
 import { useRouter } from '@/i18n/navigation';
+import { OrderType, useOrderTypeStore } from '@/store/useOrderTypeStore';
 import { useTranslations } from 'next-intl';
 
 export default function HomePage() {
   const router = useRouter();
   const t = useTranslations("HomePage");
-
-  const handleSelection = () => {
-    router.push('/menu');
+  const { setOrderType } = useOrderTypeStore();
+  
+  const handleSelection = (type: OrderType) => {
+    setOrderType(type); 
+    router.push("/menu");
   };
 
   return (
@@ -26,14 +29,14 @@ export default function HomePage() {
 
         <div className="space-y-6">
           <button
-            onClick={handleSelection}
+           onClick={() => handleSelection("DINE_IN")}
             className="w-full btn btn-primary font-bold py-6 px-4 rounded-lg text-3xl transition duration-300 ease-in-out transform hover:scale-105 shadow-lg cursor-pointer"
           >
             {t('dineIn')}
           </button>
 
           <button
-            onClick={handleSelection}
+           onClick={() => handleSelection("TAKE_OUT")}
             className="w-full btn btn-secondary font-bold py-6 px-4 rounded-lg text-3xl transition duration-300 ease-in-out transform hover:scale-105 shadow-lg cursor-pointer"
           >
             {t('takeOut')}

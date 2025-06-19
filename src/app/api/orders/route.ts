@@ -35,15 +35,15 @@ export async function GET(request: NextRequest) {
         }
       : {};
 
-    const orders = await prisma.order.findMany({
-      where,
-      orderBy: { orderedAt: "desc" },
-      include: {
-        items: {
-          include: { menu: true },
+      const orders = await prisma.order.findMany({
+        where,
+        orderBy: { orderedAt: "desc" },
+        include: {
+          items: {
+            include: { menu: true },
+          },
         },
-      },
-    });
+      });
 
     return NextResponse.json(orders);
   } catch (error) {
@@ -55,10 +55,14 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { items } = body;
+    const { items, type } = body;
 
-    if (!Array.isArray(items) || items.length === 0) {
+    if (!Array.isArray(items) || items.length === 0 || !type) {
       return NextResponse.json({ error: "Invalid request" }, { status: 400 });
+    }
+
+    if (type !== "DINE_IN" && type !== "TAKE_OUT") {
+      return NextResponse.json({ error: "Invalid order type" }, { status: 400 });
     }
 
     const menuIds = items.map((item: any) => item.id);
@@ -68,6 +72,7 @@ export async function POST(request: NextRequest) {
 
     const order = await prisma.order.create({
       data: {
+        type, 
         items: {
           create: items.map((item: any) => {
             const menu = menus.find((m) => m.id === item.id);

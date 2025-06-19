@@ -8,21 +8,19 @@ export async function fetchOrders(period: "today" | "week" | "month" | "all" = "
   }
 
   export async function fetchCreateOrder(
-    items: { id: number; quantity: number }[]
-  ): Promise<Order> {
+    items: { id: number; quantity: number }[],
+    type: "DINE_IN" | "TAKE_OUT"
+  ) {
     const res = await fetch("/api/orders", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ items }),
+      body: JSON.stringify({ items, type }),
     });
   
-    if (!res.ok) {
-      const errorData = await res.json();
-      throw new Error(errorData.error || "주문 생성 실패");
-    }
+    if (!res.ok) throw new Error("주문 생성 실패");
   
-    return res.json();
+    return await res.json();
   }
   

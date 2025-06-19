@@ -28,7 +28,6 @@ const Orders = () => {
     loadOrders();
   }, [period]);
 
-
   const sortedOrders = useMemo(() => {
     return [...orders].sort((a, b) => {
       const timeA = new Date(a.orderedAt).getTime();
@@ -86,42 +85,56 @@ const Orders = () => {
       )}
 
       <div className="space-y-6 scroll-auto h-auto overflow-auto">
-        {sortedOrders.map((order) => (
-          <div key={order.id} className="card">
-            <div className="flex justify-between mb-2">
-              <div>
-                <span style={{ fontWeight: 600, color: "var(--primary)" }}>
-                  테이블 번호:
-                </span>{" "}
-                {order.id}
-              </div>
-              <div style={{ color: "var(--secondary)", fontSize: "0.875rem" }}>
-                {new Date(order.orderedAt).toLocaleString()}
-              </div>
-            </div>
+        {sortedOrders.map((order) => {
+          const total = order.items.reduce(
+            (acc, item) => acc + item.menu.price * item.quantity,
+            0
+          );
 
-            <table className="w-full border-collapse">
-              <thead>
-                <tr>
-                  <th className="border px-2 py-1 text-left" style={{ color: "var(--primary)" }}>
-                    메뉴명
-                  </th>
-                  <th className="border px-2 py-1 text-right" style={{ color: "var(--primary)" }}>
-                    수량
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {order.items.map((item) => (
-                  <tr key={item.id}>
-                    <td className="border px-2 py-1">{item.menu.name}</td>
-                    <td className="border px-2 py-1 text-right">{item.quantity}</td>
+          return (
+            <div key={order.id} className="card">
+              <div className="flex justify-between mb-2">
+                <div className="space-y-1">
+                  <div>
+                    <strong className="text-[var(--primary)]">주문 번호:</strong> {order.id}
+                  </div>
+                  <div>
+                    <strong className="text-[var(--primary)]">이용 유형:</strong>{" "}
+                    {order.type === "DINE_IN" ? "매장 이용" : "포장"}
+                  </div>
+                  <div>
+                    <strong className="text-[var(--primary)]">총 금액:</strong>{" "}
+                    {total.toLocaleString()}원
+                  </div>
+                </div>
+                <div className="text-sm text-[var(--secondary)]">
+                  {new Date(order.orderedAt).toLocaleString()}
+                </div>
+              </div>
+
+              <table className="w-full border-collapse">
+                <thead>
+                  <tr>
+                    <th className="border px-2 py-1 text-left" style={{ color: "var(--primary)" }}>
+                      메뉴명
+                    </th>
+                    <th className="border px-2 py-1 text-right" style={{ color: "var(--primary)" }}>
+                      수량
+                    </th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        ))}
+                </thead>
+                <tbody>
+                  {order.items.map((item) => (
+                    <tr key={item.id}>
+                      <td className="border px-2 py-1">{item.menu.name}</td>
+                      <td className="border px-2 py-1 text-right">{item.quantity}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          );
+        })}
       </div>
     </div>
   );
