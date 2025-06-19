@@ -7,39 +7,38 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Menu {
-  id          Int          @id @default(autoincrement())
-  name        String
-  price       Int
-  imagePath   String
-  createdAt   DateTime     @default(now())
-  
-  categoryId  Int
-  category    Category     @relation("CategoryMenus", fields: [categoryId], references: [id])
-
-  orderItems  OrderItem[]
-}
-
 model Category {
-  id        Int      @id @default(autoincrement())
+  id        Int     @id @default(autoincrement()) @map("category_id")
   name      String
   order     Int
   createdAt DateTime @default(now())
-  menus     Menu[]   @relation("CategoryMenus")
+  menus     Menu[]
+}
+
+model Menu {
+  id          Int         @id @default(autoincrement()) @map("menu_id")
+  name        String
+  price       Int
+  imagePath   String
+  createdAt   DateTime    @default(now())
+  categoryId  Int         @map("category_id")
+  category    Category    @relation(fields: [categoryId], references: [id])
+  orderItems  OrderItem[]
 }
 
 model Order {
-  id         Int         @id @default(autoincrement())
+  id         Int         @id @default(autoincrement()) @map("order_id")
   orderedAt  DateTime    @default(now())
   items      OrderItem[]
 }
 
 model OrderItem {
-  id        Int    @id @default(autoincrement())
-  order     Order  @relation(fields: [orderId], references: [id])
-  orderId   Int
-  menu      Menu   @relation(fields: [menuId], references: [id])
-  menuId    Int
-  quantity  Int
-  totalPrice Int  
+  id         Int      @id @default(autoincrement()) @map("orderItem_id")
+  orderId    Int      @map("order_id")
+  menuId     Int      @map("menu_id")
+  quantity   Int
+  totalPrice Int
+
+  order      Order    @relation(fields: [orderId], references: [id])
+  menu       Menu     @relation(fields: [menuId], references: [id])
 }
