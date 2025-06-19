@@ -24,3 +24,13 @@ export async function deleteMenu(id: number): Promise<void> {
 
   if (!res.ok) throw new Error('메뉴 삭제 실패');
 }
+
+
+export const updateMenuOrder = async (orderedIds: { id: number; order: number }[]) => {
+  const res = await fetch("/api/menus/reorder", {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ orderedIds }),
+  });
+  if (!res.ok) throw new Error("순서 저장 실패");
+};

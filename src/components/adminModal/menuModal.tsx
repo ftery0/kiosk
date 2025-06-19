@@ -1,14 +1,16 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import { Category } from '@/types/category.type';
+import { Menu } from '@/types/menu.type';
 import { fetchCategories } from '@/api/category';
 
 interface Props {
   onClose: () => void;
   onSuccess: () => void;
+  selectedMenu?: Menu | null; // 수정할 메뉴 정보 (선택적)
 }
 
-const MenuModal = ({ onClose, onSuccess }: Props) => {
+const MenuModal = ({ onClose, onSuccess, selectedMenu }: Props) => {
   const [name, setName] = useState('');
   const [price, setPrice] = useState('');
   const [categoryId, setCategoryId] = useState<number | null>(null);
@@ -16,26 +18,35 @@ const MenuModal = ({ onClose, onSuccess }: Props) => {
   const [message, setMessage] = useState('');
   const [categories, setCategories] = useState<Category[]>([]);
 
-  
+  const isEditMode = !!selectedMenu; // 수정 모드 여부
+
   useEffect(() => {
     const loadCategories = async () => {
       try {
         const data = await fetchCategories();
         setCategories(data);
-        if (data.length > 0) setCategoryId(data[0].id); 
+        
+        if (selectedMenu) {
+          setName(selectedMenu.name);
+          setPrice(String(selectedMenu.price));
+          setCategoryId(selectedMenu.category.id);
+        } else if (data.length > 0) {
+          setCategoryId(data[0].id);
+        }
       } catch (error) {
         console.error('카테고리 로딩 실패:', error);
         setMessage('카테고리 로딩에 실패했습니다.');
       }
     };
     loadCategories();
-  }, []);
+  }, [selectedMenu]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!name || !price || categoryId === null || !image) {
-      setMessage('모든 필드를 입력해주세요.');
+    // 수정 모드에서는 이미지가 필수가 아님
+    if (!name || !price || categoryId === null || (!isEditMode && !image)) {
+      setMessage(isEditMode ? '이름, 가격, 카테고리를 입력해주세요.' : '모든 필드를 입력해주세요.');
       return;
     }
 
@@ -43,21 +54,39 @@ const MenuModal = ({ onClose, onSuccess }: Props) => {
     formData.append('name', name);
     formData.append('price', price);
     formData.append('categoryId', String(categoryId));
-    formData.append('image', image);
+    
+    // 새 이미지가 선택된 경우에만 추가
+    if (image) {
+      formData.append('image', image);
+    }
 
     try {
-      const res = await fetch('/api/menus', {
-        method: 'POST',
-        body: formData,
-      });
+      let res;
+      
+      if (isEditMode) {
+        // 수정 모드: PUT 요청
+        res = await fetch(`/api/menus/${selectedMenu.id}`, {
+          method: 'PUT',
+          body: formData,
+        });
+      } else {
+        // 추가 모드: POST 요청
+        res = await fetch('/api/menus', {
+          method: 'POST',
+          body: formData,
+        });
+      }
 
-      if (!res.ok) throw new Error('메뉴 생성 실패');
+      if (!res.ok) throw new Error(isEditMode ? '메뉴 수정 실패' : '메뉴 생성 실패');
 
-      setMessage('메뉴가 성공적으로 추가되었습니다!');
+      setMessage(isEditMode ? '메뉴가 성공적으로 수정되었습니다!' : '메뉴가 성공적으로 추가되었습니다!');
+      
+      // 폼 초기화
       setName('');
       setPrice('');
       setImage(null);
       setCategoryId(categories[0]?.id ?? null);
+      
       onSuccess();
       onClose();
     } catch (err: unknown) {
@@ -72,7 +101,9 @@ const MenuModal = ({ onClose, onSuccess }: Props) => {
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
       <div className="bg-white p-6 rounded shadow max-w-lg w-full">
-        <h2 className="text-xl font-bold mb-4">메뉴 추가</h2>
+        <h2 className="text-xl font-bold mb-4">
+          {isEditMode ? '메뉴 수정' : '메뉴 추가'}
+        </h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block font-semibold mb-1">이름</label>
@@ -110,7 +141,9 @@ const MenuModal = ({ onClose, onSuccess }: Props) => {
             </select>
           </div>
           <div>
-            <label className="block font-semibold mb-1">이미지</label>
+            <label className="block font-semibold mb-1">
+              이미지 {isEditMode && '(변경하지 않으려면 비워두세요)'}
+            </label>
             <input
               type="file"
               accept="image/*"
@@ -119,8 +152,13 @@ const MenuModal = ({ onClose, onSuccess }: Props) => {
                 if (file) setImage(file);
               }}
               className="w-full cursor-pointer"
-              required
+              required={!isEditMode} // 수정 모드에서는 이미지가 필수가 아님
             />
+            {isEditMode && selectedMenu && (
+              <p className="text-sm text-gray-500 mt-1">
+                현재 이미지: {selectedMenu.imagePath.split('/').pop()}
+              </p>
+            )}
           </div>
           <div className="flex justify-end gap-2">
             <button
@@ -132,9 +170,9 @@ const MenuModal = ({ onClose, onSuccess }: Props) => {
             </button>
             <button
               type="submit"
-              className="bg-blue-600 text-white px-4 py-2 rounded cursor-pointer"
+              className="bg-primary text-white px-4 py-2 rounded cursor-pointer"
             >
-              추가하기
+              {isEditMode ? '수정하기' : '추가하기'}
             </button>
           </div>
           {message && <p className="text-center text-sm text-red-500">{message}</p>}

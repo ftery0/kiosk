@@ -85,7 +85,7 @@ const Orders = () => {
         <p style={{ color: "var(--secondary)" }}>주문 내역이 없습니다.</p>
       )}
 
-      <div className="space-y-6">
+      <div className="space-y-6 scroll-auto h-auto overflow-auto">
         {sortedOrders.map((order) => (
           <div key={order.id} className="card">
             <div className="flex justify-between mb-2">

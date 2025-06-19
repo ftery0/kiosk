@@ -24,6 +24,7 @@ model Menu {
   categoryId  Int         @map("category_id")
   category    Category    @relation(fields: [categoryId], references: [id])
   orderItems  OrderItem[]
+  order      Int      @default(999)
 }
 
 model Order {

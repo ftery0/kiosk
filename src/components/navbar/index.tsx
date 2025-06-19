@@ -37,7 +37,7 @@ const Nav = ({ selectedCategoryId, setSelectedCategoryId }: NavProps) => {
           onClick={() => setSelectedCategoryId(category.id)}
           className={`px-4 py-2 rounded-full text-sm font-semibold transition-colors cursor-pointer ${
             selectedCategoryId === category.id
-              ? "bg-[var(--primary)] text-white"
+              ? "bg-primary text-white"
               : "bg-gray-100 text-[var(--foreground)]"
           }`}
         >

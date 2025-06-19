@@ -20,6 +20,36 @@ const Categories = () => {
   const [editingId, setEditingId] = useState<number | null>(null);
   const [editingName, setEditingName] = useState("");
 
+  const handleSaveOrder = async () => {
+    try {
+      const orderedIds = categories.map((cat) => cat.id);
+      await fetch("/api/categories/reorder", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ orderedIds }),
+      });
+      alert("순서가 저장되었습니다.");
+      loadCategories();
+    } catch {
+      alert("순서 저장 실패");
+    }
+  };
+  
+  const moveUp = (index: number) => {
+    if (index === 0) return;
+    const newCategories = [...categories];
+    [newCategories[index - 1], newCategories[index]] = [newCategories[index], newCategories[index - 1]];
+    setCategories(newCategories);
+  };
+  
+  const moveDown = (index: number) => {
+    if (index === categories.length - 1) return;
+    const newCategories = [...categories];
+    [newCategories[index], newCategories[index + 1]] = [newCategories[index + 1], newCategories[index]];
+    setCategories(newCategories);
+  };
+
+
   const loadCategories = async () => {
     setLoading(true);
     setError(null);
@@ -80,54 +110,59 @@ const Categories = () => {
         카테고리 추가
       </button>
 
+      {categories.length > 0 && (
+        <button
+          className="bg-secondary text-white px-4 py-2 rounded mb-4 ml-4 cursor-pointer"
+          onClick={handleSaveOrder}
+        >
+          순서 저장
+        </button>
+      )}
+
       {loading && <p>불러오는 중...</p>}
       {error && <p className="text-red-500">{error}</p>}
 
+  
+
       <ul>
-        {categories.map((cat) => (
-          <li key={cat.id} className="flex items-center gap-2 mb-2">
-            {editingId === cat.id ? (
-              <>
-                <input
-                  value={editingName}
-                  onChange={(e) => setEditingName(e.target.value)}
-                  className="border px-2"
-                />
-                <button
-                  onClick={() => handleUpdate(cat.id)}
-                  className="bg-green-500 text-white px-2 rounded cursor-pointer"
-                >
-                  저장
-                </button>
-                <button
-                  onClick={() => setEditingId(null)}
-                  className="text-gray-500 cursor-pointer"
-                >
-                  취소
-                </button>
-              </>
-            ) : (
-              <>
-                <span className="flex-1">{cat.name}</span>
-                <button
-                  onClick={() => {
-                    setEditingId(cat.id);
-                    setEditingName(cat.name);
-                  }}
-                  className="bg-yellow-400 text-white px-2 rounded cursor-pointer"
-                >
-                  수정
-                </button>
-                <button
-                  onClick={() => handleDelete(cat.id)}
-                  className="bg-red-500 text-white px-2 rounded cursor-pointer"
-                >
-                  삭제
-                </button>
-              </>
-            )}
-          </li>
-        ))}
+        {categories.map((cat, index) => (
+      <li key={cat.id} className="flex items-center gap-2 mb-2">
+        {editingId === cat.id ? (
+          <>
+            <input
+              value={editingName}
+              onChange={(e) => setEditingName(e.target.value)}
+              className="border px-2"
+            />
+            <button onClick={() => handleUpdate(cat.id)} className="bg-green-500 text-white px-2 rounded">
+              저장
+            </button>
+            <button onClick={() => setEditingId(null)} className="text-gray-500">
+              취소
+            </button>
+          </>
+        ) : (
+          <>
+            <span className="flex-1">{cat.name}</span>
+
+            
+            <button onClick={() => moveUp(index)} className="px-2 text-sm cursor-pointer">▲</button>
+            <button onClick={() => moveDown(index)} className="px-2 text-sm cursor-pointer">▼</button>
+
+            <button onClick={() => {
+              setEditingId(cat.id);
+              setEditingName(cat.name);
+            }} className="bg-yellow-400 text-white px-2 rounded">
+              수정
+            </button>
+            <button onClick={() => handleDelete(cat.id)} className="bg-red-500 text-white px-2 rounded">
+              삭제
+            </button>
+          </>
+        )}
+      </li>
+    ))}
+
       </ul>
 
       {/* 모달 */}

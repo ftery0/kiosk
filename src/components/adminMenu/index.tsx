@@ -21,7 +21,6 @@ const MenuList = ({ onEdit }: Props) => {
       const data = await fetchMenusByCategory(null);
       setMenus(data);
     } catch (error) {
-      console.error('메뉴 조회 실패:', error);
     } finally {
       setIsLoading(false);  
     }
