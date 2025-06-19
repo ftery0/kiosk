@@ -7,7 +7,7 @@ import { fetchCategories } from '@/api/category';
 interface Props {
   onClose: () => void;
   onSuccess: () => void;
-  selectedMenu?: Menu | null; // 수정할 메뉴 정보 (선택적)
+  selectedMenu?: Menu | null; 
 }
 
 const MenuModal = ({ onClose, onSuccess, selectedMenu }: Props) => {
@@ -18,7 +18,7 @@ const MenuModal = ({ onClose, onSuccess, selectedMenu }: Props) => {
   const [message, setMessage] = useState('');
   const [categories, setCategories] = useState<Category[]>([]);
 
-  const isEditMode = !!selectedMenu; // 수정 모드 여부
+  const isEditMode = !!selectedMenu; 
 
   useEffect(() => {
     const loadCategories = async () => {
@@ -44,7 +44,7 @@ const MenuModal = ({ onClose, onSuccess, selectedMenu }: Props) => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // 수정 모드에서는 이미지가 필수가 아님
+    
     if (!name || !price || categoryId === null || (!isEditMode && !image)) {
       setMessage(isEditMode ? '이름, 가격, 카테고리를 입력해주세요.' : '모든 필드를 입력해주세요.');
       return;
@@ -55,7 +55,7 @@ const MenuModal = ({ onClose, onSuccess, selectedMenu }: Props) => {
     formData.append('price', price);
     formData.append('categoryId', String(categoryId));
     
-    // 새 이미지가 선택된 경우에만 추가
+    
     if (image) {
       formData.append('image', image);
     }
@@ -64,13 +64,13 @@ const MenuModal = ({ onClose, onSuccess, selectedMenu }: Props) => {
       let res;
       
       if (isEditMode) {
-        // 수정 모드: PUT 요청
+        
         res = await fetch(`/api/menus/${selectedMenu.id}`, {
           method: 'PUT',
           body: formData,
         });
       } else {
-        // 추가 모드: POST 요청
+        
         res = await fetch('/api/menus', {
           method: 'POST',
           body: formData,
@@ -81,7 +81,7 @@ const MenuModal = ({ onClose, onSuccess, selectedMenu }: Props) => {
 
       setMessage(isEditMode ? '메뉴가 성공적으로 수정되었습니다!' : '메뉴가 성공적으로 추가되었습니다!');
       
-      // 폼 초기화
+      
       setName('');
       setPrice('');
       setImage(null);
@@ -152,7 +152,7 @@ const MenuModal = ({ onClose, onSuccess, selectedMenu }: Props) => {
                 if (file) setImage(file);
               }}
               className="w-full cursor-pointer"
-              required={!isEditMode} // 수정 모드에서는 이미지가 필수가 아님
+              required={!isEditMode} 
             />
             {isEditMode && selectedMenu && (
               <p className="text-sm text-gray-500 mt-1">

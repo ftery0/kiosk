@@ -1,4 +1,4 @@
-// app/admin/page.tsx
+
 "use client";
 
 import { useState, useEffect } from 'react';
@@ -10,13 +10,13 @@ const Admin = () => {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
-  // 페이지 로드 시 이미 로그인되어 있는지 확인
+  
   useEffect(() => {
     const checkAuth = async () => {
       try {
         const response = await fetch('/api/check-auth'); 
         if (response.ok) {
-          // 이미 로그인되어 있으면 categories로 리디렉션
+          
           router.replace('/admin/categories');
         }
       } catch (error) {
@@ -33,7 +33,7 @@ const Admin = () => {
     setError('');
 
     try {
-      const response = await fetch('/api/login', { // /admin/ 제거
+      const response = await fetch('/api/login', { 
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -42,10 +42,10 @@ const Admin = () => {
       });
 
       if (response.ok) {
-        // 로그인 성공 시 categories로 이동
+        
         router.replace('/admin/categories');
       } else {
-        // 로그인 실패 시 홈으로 이동
+        
         router.replace('/');
       }
     } catch (error) {

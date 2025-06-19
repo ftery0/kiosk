@@ -1,6 +1,5 @@
 "use client";
-import React, { useState, useEffect, useCallback } from "react"; // useCallback 추가
-import { useRouter } from "next/navigation"; // 페이지 이동을 위해 useRouter 추가
+import React, { useState, useEffect, useCallback } from "react"; 
 import Nav from "@/components/navbar";
 import MenuList from "@/components/MenuList";
 import MenuModal from "@/components/menuModal";
