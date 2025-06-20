@@ -52,6 +52,12 @@ export async function DELETE(_: NextRequest, { params }: { params: { id: string 
   if (isNaN(id)) return NextResponse.json({ error: '유효하지 않은 ID' }, { status: 400 });
 
   try {
+    await prisma.orderItem.deleteMany({
+      where: {
+        menuId: id,
+      },
+    });
+    
     await prisma.menu.delete({
       where: { id },
     });

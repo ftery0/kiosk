@@ -1,16 +1,16 @@
-import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
 export function middleware(request: NextRequest) {
-  
-  if (request.nextUrl.pathname.startsWith('/admin') && 
-      request.nextUrl.pathname !== '/admin' &&
-      !request.nextUrl.pathname.startsWith('/api')) {
-    
-    const authCookie = request.cookies.get('admin-auth');
-    
-    if (!authCookie || authCookie.value !== 'true') {
-  
+  const { pathname } = request.nextUrl;
+
+  const isApiRoute = pathname.startsWith('/api');
+  const isLoginPage = pathname === '/admin';
+  const isAdminProtected = pathname.startsWith('/admin');
+
+  if (isAdminProtected && !isApiRoute && !isLoginPage) {
+    const cookie = request.cookies.get('admin-auth');
+
+    if (!cookie || cookie.value !== 'true') {
       return NextResponse.redirect(new URL('/admin', request.url));
     }
   }
@@ -19,5 +19,7 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: '/admin/:path*',
+  matcher: [
+    '/admin/:path*', 
+  ],
 };
